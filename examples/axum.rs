@@ -1,13 +1,18 @@
-# EVE ESI
+use axum::{
+    extract::Query,
+    http::StatusCode,
+    response::{IntoResponse, Response},
+    routing::get,
+    Json, Router,
+};
+use eve_esi::{character::get_character, corporation::get_corporation, initialize_eve_esi};
+use serde::Deserialize;
 
-Black Rose's API wrapper for interaction with [EVE Online's ESI](https://esi.evetech.net/ui/).
+#[derive(Deserialize)]
+struct GetByIdParams {
+    id: i32,
+}
 
-## Implementation
-
-1. Initialize ESI in your main function using the `initialize_eve_esi` function which will set the user agent, this includes your application name & contact email if CCP needs to reach out to you for any reason.
-2. Use ESI routes as needed from there.
-
-```rust
 #[tokio::main]
 async fn main() {
     let application_name = "Black Rose EVE ESI Example";
@@ -37,15 +42,14 @@ async fn get_esi_character(params: Query<GetByIdParams>) -> Response {
         }
     }
 }
-```
 
-See the [axum](https://github.com/blackrose-eve/eve_esi/tree/main/examples/axum.rs) example.
+async fn get_esi_corporation(params: Query<GetByIdParams>) -> Response {
+    match get_corporation(params.0.id).await {
+        Ok(corporation) => (StatusCode::OK, Json(corporation)).into_response(),
+        Err(error) => {
+            let status_code = StatusCode::from_u16(error.status().unwrap().into()).unwrap();
 
-To test out the example:
-1. Run `cargo run --example axum`
-2. Head to one of the URLs posted in your console, change the IDs to test out different characters/corporations
-
-## Notes
-
-- More ESI routes will be added as needed, feel free to submit pull requests to add any you may need.
-- Only public ESI routes are available, private routes will be added at a later date.
+            (status_code, Json(error.to_string())).into_response()
+        }
+    }
+}

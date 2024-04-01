@@ -1,10 +1,21 @@
 [package]
 name = "eve_esi"
 version = "0.1.0"
+authors = ["Hyziri"]
 edition = "2021"
+description = "Black Rose's API wrapper for interaction with EVE Online's ESI."
+keywords = ["esi", "black_rose", "eve_esi", "eve_online", "eve_swagger_interface"]
+repository = "https://github.com/blackrose-eve/eve_esi"
+license = "MIT"
+readme = "README.md"
+include = ["/src", "LICENSE", "README.md"]
 
 [dependencies]
 chrono = { version = "0.4.34", features = ["serde"] }
 lazy_static = "1.4.0"
 reqwest = { version = "0.11.24", features = ["json"] }
 serde = { version = "1.0.197", features = ["derive"] }
+
+[dev-dependencies]
+axum = "0.7.5"
+tokio = { version = "1.36.0", features = ["rt-multi-thread"] }

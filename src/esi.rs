@@ -14,6 +14,8 @@ pub async fn get_from_public_esi<T: DeserializeOwned>(url: &str) -> Result<T, re
         .send()
         .await?;
 
+    req.error_for_status_ref()?;
+
     let result: T = req.json().await?;
 
     Ok(result)
@@ -29,6 +31,8 @@ pub async fn post_to_public_esi<T: DeserializeOwned, U: Serialize + ?Sized>(
         .json(data)
         .send()
         .await?;
+
+    req.error_for_status_ref()?;
 
     let result: T = req.json().await?;
 
