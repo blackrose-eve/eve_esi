@@ -29,6 +29,7 @@ async fn main() {
         .unwrap();
 
     println!("Test character API at http://localhost:8000/character?id=2114794365");
+    println!("Test corporation API at http://localhost:8000/corporation?id=98755360");
     axum::serve(listener, app).await.unwrap();
 }
 
