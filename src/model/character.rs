@@ -18,7 +18,7 @@ pub struct Character {
 
 #[derive(Serialize, Deserialize)]
 pub struct CharacterAffiliation {
-    pub allliance_id: Option<i32>,
+    pub alliance_id: Option<i32>,
     pub character_id: i32,
     pub corporation_id: i32,
     pub faction_id: Option<i32>,
